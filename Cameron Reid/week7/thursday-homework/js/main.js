@@ -1,7 +1,8 @@
 const FLICKR_API_KEY = '2f5ac274ecfac5a455f38745704ad084';
 const FLICKR_BASE_URL = 'https://api.flickr.com/services/rest';
 
-
+let scrollPoint;
+let pageCount = 1;
 let searchFormNode, searchInputNode, resultsNode, detailsNode;
 
 // Params:
@@ -34,7 +35,7 @@ const fetchSearchResults = async (queryText) => {
       }
     });
 
-    console.log('data', res.data.photos );
+    console.log('data', res.data.photos.page + 1 );
     renderSearchResults(res.data.photos);
 
   } catch(err){
@@ -63,7 +64,9 @@ const renderSearchResults = (results) => {
     `;
 
     liNode.addEventListener('click', ev => {
-      fetchImageDetails( photo.id )
+      scrollPoint = ;
+      console.log('CURRENT SCROLL POINT', scrollPoint);
+      fetchImageDetails( photo.id, )
     })
     ulNode.appendChild( liNode );
 
@@ -115,6 +118,7 @@ const fetchImageDetails = async (id) => {
 }; //fetchImageDetails
 
 const renderImageDetails = (photo) => {
+  
   console.log('in renderImageDetails():', photo);
 
   
@@ -130,8 +134,11 @@ const renderImageDetails = (photo) => {
   `;
 
   document.querySelector('#backLink').addEventListener('click', () => {
+    resultsNode.scrollTo(scrollPoint);
+    
     detailsNode.style.display = 'none';
     resultsNode.style.display = 'block';
+
   })
 
 } //renderImageDetails
@@ -172,5 +179,6 @@ if(bottomOfWindow >= document.body.scrollHeight * 0.9 ){
 
   // start the next-page AJAX request a bit before the bottom
   // MAKE SURE YOU USE THROTTLE
+ 
 }
 })
